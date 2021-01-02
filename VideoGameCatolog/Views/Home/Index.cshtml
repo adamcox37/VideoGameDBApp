@@ -13,16 +13,21 @@
 }
 
 <div class="table">
-    <table class ="table table-border table-hover">
-        <tr>
-            @{ 
-                foreach (var col in TableHeaders)
-                {
-                    <th>
-                        @col
-                    </th>
+    <table>
+        <thead>
+            <tr>
+                @{
+                    foreach (var col in TableHeaders)
+                    {
+                        <th>
+                            @col
+                        </th>
+                    }
                 }
-            }
-        </tr>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
     </table>
 </div>

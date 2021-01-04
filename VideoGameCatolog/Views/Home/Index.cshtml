@@ -27,7 +27,23 @@
             </tr>
         </thead>
         <tbody>
-
+            @{ 
+                if (Model != null)
+                {
+                    foreach (var Data in Model)
+                    {
+                        <tr>
+                            <td>@Data.Id</td>
+                            <td>@Data.GameTitle</td>
+                            <td>@Data.ReleaseYear</td>
+                            <td>@Data.Platform</td>
+                            <td>@Data.Publisher</td>
+                            <td>@Data.CompleteCopy</td>
+                            <td>@Data.PhysicalCopy</td>
+                        </tr>
+                    }
+                }
+            }
         </tbody>
     </table>
 </div>

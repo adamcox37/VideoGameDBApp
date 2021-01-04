@@ -8,7 +8,6 @@ using Microsoft.Extensions.Logging;
 using VideoGameCatolog.Models;
 using System.Data.SQLite;
 using DataAccessLibrary;
-using DataAccessLibrary.Models;
 
 namespace VideoGameCatolog.Controllers
 {
@@ -17,35 +16,38 @@ namespace VideoGameCatolog.Controllers
         SQLiteCommand command = new SQLiteCommand();
         SQLiteDataReader dr;
         SQLiteConnection connection = new SQLiteConnection();
-        List<VideoGameModel> game = new List<VideoGameModel>();
-        List<ConsoleModel> system = new List<ConsoleModel>();
+        List<VideoGameModel> games = new List<VideoGameModel>();
+        List<ConsoleModel> systems = new List<ConsoleModel>();
 
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            connection.ConnectionString = VideoGameCatolog.Properties.Resources.ConnectionString;
+            connection.ConnectionString = VideoGameCatolog.Properties.Resources.ConnectionString; // ConnectionString to SQLite DB
         }
 
         public IActionResult Index()
         {
-            return View();
+            GetData();
+            return View(games);
         }
 
-        private void GetData()
+        public IActionResult ConsoleDB()
+        {
+            GetData();
+            return View(systems);
+        }
+
+        private void GetData() // The SQLite data
         {
             try
             {
                 connection.Open();
                 command.Connection = connection;
                 command.CommandText = "Select Id, GameTitle, ReleaseYear, Platform, Publisher, CompleteCopy, PhsyicalCopy from VideoGames";
-                command.CommandText = "Select Id, ConsoleName from Console";
+                command.CommandText = "Select Id, ConsoleName, Manufacturer, Notes from Console";
                 dr = command.ExecuteReader();
-                while (dr.Read())
-                {
-                    
-                }
                 connection.Close();
             }
             catch (Exception ex)
@@ -55,12 +57,24 @@ namespace VideoGameCatolog.Controllers
             }
         }
 
-        public IActionResult AddGame()
+        public IActionResult AddGame() // Right clicked on method to Add View.  Add Razor View and make sure you are pulling from the correct Model
         {
             return View();
         }
 
-        public IActionResult RemoveGame()
+        [HttpPost] // Set up to post data to DB
+        [ValidateAntiForgeryToken] // Second level of security if JavaScript fails or is turned off
+        public IActionResult AddGame(VideoGameModel videoGame)
+        {
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction("Index"); // If data is valid it will post to the DB
+            }
+
+            return View(); // If data is invalid it will return the View
+        }
+
+        public IActionResult RemoveGame() // Same as AddGame()
         {
             return View();
         }

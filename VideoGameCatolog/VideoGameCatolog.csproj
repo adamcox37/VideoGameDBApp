@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.78" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
     <PackageReference Include="MultiTarget.Microsoft.Data.Sqlite" Version="2.1.1" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.113.7" />

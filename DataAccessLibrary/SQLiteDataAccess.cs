@@ -5,27 +5,36 @@ using System.Text;
 using System.Data.SQLite;
 using Dapper;
 using System.Linq;
+using System.Configuration;
 
 namespace DataAccessLibrary
 {
-    public class SQLiteDataAccess
+    public static class SQLiteDataAccess
     {
-        public List<T> LoadData<T, U>(string sqlStatement, U parameters, string connectionString)
+        public static string GetConnectionString(string connectionName = "VideoGameDB")
         {
-            using (IDbConnection connection = new SQLiteConnection(connectionString))
+            return ConfigurationManager.ConnectionStrings[connectionName].ConnectionString;
+        }
+        public static List<T> LoadData<T, U>(string sql)
+        {
+            using (IDbConnection connection = new SQLiteConnection(GetConnectionString()))
             {
-                List<T> rows = connection.Query<T>(sqlStatement, parameters).ToList();
+                return connection.Query<T>(sql).ToList();
 
-                return rows;
             }
         }
 
-        public void SaveData<T>(string sqlStatement, T parameters, string connectionString)
+        public static int SaveData<T>(string sql, T data)
         {
-            using (IDbConnection connection = new SQLiteConnection(connectionString))
+            using (IDbConnection connection = new SQLiteConnection(GetConnectionString()))
             {
-                connection.Execute(sqlStatement, parameters);
+                return connection.Execute(sql, data);
             }
+        }
+
+        internal static List<T> LoadData<T>(string sql)
+        {
+            throw new NotImplementedException();
         }
     }
 }

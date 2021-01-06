@@ -13,48 +13,21 @@ namespace VideoGameCatolog.Controllers
 {
     public class HomeController : Controller
     {
-        SQLiteCommand command = new SQLiteCommand();
-        SQLiteDataReader dr;
-        SQLiteConnection connection = new SQLiteConnection();
-        List<VideoGameModel> games = new List<VideoGameModel>();
-        List<ConsoleModel> systems = new List<ConsoleModel>();
-
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            connection.ConnectionString = VideoGameCatolog.Properties.Resources.ConnectionString; // ConnectionString to SQLite DB
         }
 
         public IActionResult Index()
         {
-            GetData();
-            return View(games);
+            return View();
         }
 
         public IActionResult ConsoleDB()
         {
-            GetData();
-            return View(systems);
-        }
-
-        private void GetData() // The SQLite data
-        {
-            try
-            {
-                connection.Open();
-                command.Connection = connection;
-                command.CommandText = "Select Id, GameTitle, ReleaseYear, Platform, Publisher, CompleteCopy, PhsyicalCopy from VideoGames";
-                command.CommandText = "Select Id, ConsoleName, Manufacturer, Notes from Console";
-                dr = command.ExecuteReader();
-                connection.Close();
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
+            return View();
         }
 
         public IActionResult AddGame() // Right clicked on method to Add View.  Add Razor View and make sure you are pulling from the correct Model
@@ -68,6 +41,7 @@ namespace VideoGameCatolog.Controllers
         {
             if (ModelState.IsValid)
             {
+                int recordsCreated = VideoGameProcessor.CreateVideoGame(videoGame.GameTitle, videoGame.ReleaseYear, videoGame.Platform, videoGame.Publisher, videoGame.CompleteCopy, videoGame.PhysicalCopy);
                 return RedirectToAction("Index"); // If data is valid it will post to the DB
             }
 

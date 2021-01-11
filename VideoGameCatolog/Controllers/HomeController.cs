@@ -48,6 +48,23 @@ namespace VideoGameCatolog.Controllers
             return View(); // If data is invalid it will return the View
         }
 
+        public IActionResult AddConsole()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ConsoleDB(ConsoleModel gameSystem)
+        {
+            if (ModelState.IsValid)
+            {
+                int recordsCreated = ConsoleProcessor.CreateConsole(gameSystem.ConsoleName, gameSystem.Manufacturer, gameSystem.Notes);
+                return RedirectToAction("ConsoleDB");
+            }
+            return View();
+        }
+
         public IActionResult RemoveGame() // Same as AddGame()
         {
             return View();

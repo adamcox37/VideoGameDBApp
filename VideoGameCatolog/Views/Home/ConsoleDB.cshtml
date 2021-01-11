@@ -1,7 +1,45 @@
 ﻿
 @{
     ViewData["Title"] = "ConsoleDB";
+    string[] TableHeaders = new string[]
+    {
+        "Id",
+        "Console Name",
+        "Manufacturer",
+        "Notes"
+    };
 }
 
-<h1>ConsoleDB</h1>
+<div class="table">
+    <table>
+        <thread>
+            <tr>
+                @{
+                    foreach (var col in TableHeaders)
+                    {
+                        <th>
+                            @col
+                        </th>
+                    }
+                }
+            </tr>
+        </thread>
+        <tbody>
+            @{
+                if (Model != null)
+                {
+                    foreach (var Data in Model)
+                    {
+                        <tr>
+                            <td>@Data.Id</td>
+                            <td>@Data.ConsoleName</td>
+                            <td>@Data.Manufacturer</td>
+                            <td>@Data.Notes</td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>
 
